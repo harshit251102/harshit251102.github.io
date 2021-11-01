@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONLINE MusicPlayer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@1,300&display=swap');
+
+        *,
+        * ::before,
+        * ::after {
+            margin: 0;
+            padding: 0%;
+            box-sizing: border-box;
+        }
+
+        #heading {
+            /* text-align: center; */
+            /* text-decoration: wavy; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #6c2929;
+            background-color: #d6d1d1;
+            padding: 1rem;
+            border-radius: 7rem;
+            /* height: 7rem; */
+        }
+
+        html {
+            font-size: 62.5%;
+            font-family: "Jost", sans-serif;
+        }
+
+        .main_div {
+            width: 100vw;
+            height: 100vh;
+            background-color: #f6f6f6;
+            display: grid;
+            place-items: center;
+        }
+
+        .music_container {
+            width: 35rem;
+            /*1 rem = 10 px*/
+            /*so width = 350px*/
+            height: 55rem;
+            background-color: #f6f6f6;
+            border-radius: 2rem;
+            box-shadow: 0 1.2rem 3rem 0.5rem rgba(0, 0, 0, 0.2);
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .music_container #title {
+            text-transform: uppercase;
+            letter-spacing: 0.2 rem;
+            word-spacing: 0.5rem;
+            color: #171717;
+            margin: 1rem 0 0.5rem 0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.3);
+        }
+
+        .music_container #artist {
+            color: #908383;
+            text-transform: capitalize;
+            letter-spacing: 0.1rem;
+            font-size: 2rem;
+            margin-bottom: 4rem;
+            font-weight: 500;
+        }
+
+        .img_container {
+            width: 25rem;
+            height: 25rem;
+            margin: auto;
+        }
+
+        img {
+            /* make the object fit and circle */
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            margin-top: 0.5rem;
+            object-fit: cover;
+            box-shadow: 0 1.2rem 3rem 0.5rem rgba(0, 0, 0, 0.4);
+        }
+
+        .music_controls {
+            width: 20rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: auto;
+            margin-top: 2rem;
+        }
+
+        .music_controls .fas {
+            color: #111111;
+            font-size: 2rem;
+            cursor: pointer;
+            filter: drop-shadow(0 1.2rem 3rem 0.5rem rgba(0, 0, 0, 0.4));
+        }
+
+        .music_controls .main_button {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            background-color: #111;
+            color: #f6f6f6;
+            /* add display flex to center the icons */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .music_controls .fas:hover {
+            color: grey;
+        }
+
+        .music_controls .fa-play:hover {
+            background-color: #f6f6f6;
+            color: #111;
+            box-shadow: 0 1rem 2rem 0.2rem rgba(0, 0, 0, 0.4);
+        }
+
+        /* add anime class to animate */
+        .anime {
+            animation: rotatePlayer 3s linear infinite;
+        }
+
+        @keyframes rotatePlayer {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Progress Bar  */
+
+        .progressbar_container {
+            width: 100%;
+            height: auto;
+            padding: 1rem 0;
+            margin-top: 1rem;
+        }
+
+        .progress_div {
+            width: 100%;
+            height: 0.5rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07), 0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
+            border-radius: 4rem;
+            position: relative;
+            margin-top: 0.5rem;
+            transition: all 1s linear;
+            -moz-transition: all 1s linear;
+            -o-transition: all 1s linear;
+            -webkit-transition: all 1s linear;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background-color: black;
+            border-radius: 4rem;
+            /* transition: width 1s linear;
+    -moz-transition: width 1s linear;
+    -o-transition: width 1s linear;
+    -webkit-transition: width 1s linear; */
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .progress_duration_meter {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main_div">
+        <h1 id="heading">Harshit's MUSIC PLAYER</h1>
+        <div class="music_container">
+            <h2 id="title">SENORITA</h2>
+            <h3 id="artist">Shawn Mendes</h3>
+            <div class="img_container">
+                <img src="https://www.quirkybyte.com/wp-content/uploads/2019/07/Senorita-English-Song-Download-Shawn-Mendes.png"
+                    alt="">
+            </div>
+            <audio
+                src="https://hiphopmore.site/music/uploads/2021/10/Shawn_Mendes_Ft_Camila_Cabello_-_Senorita-HIPHOPMORE.COM.mp3"></audio>
+            <!-------progress bar---->
+            <div class="progressbar_container" id="progress_container">
+                <div class="progress_duration_meter">
+                    <div id="current_time">0:00</div>
+                    <div id="duration">3:25</div>
+                </div>
+                <div class="progress_div" id="progress_div">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+            <!-------controls-------->
+            <div class="music_controls">
+                <i class="fas fa-backward" id="prev" title="Previous"></i>
+                <i class="fas fa-play main_button" id="play" title="Play"></i>
+                <i class="fas fa-forward" id="next" title="Next"></i>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const music = document.querySelector('audio');
+    const play = document.getElementById('play');
+    const img = document.querySelector('img');
+    const title = document.getElementById('title');
+    const artist = document.getElementById('artist');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    let total_duration = document.getElementById('duration');
+    let current_time = document.getElementById('current_time');
+    let progress_div = document.getElementById('progress_div');
+    let isPlaying = false;
+    const playMusic = () => {
+        isPlaying = true;
+        music.play();
+        play.classList.replace('fa-play', 'fa-pause');
+        img.classList.add('anime');
+    }
+    const pauseMusic = () => {
+        isPlaying = false;
+        music.pause();
+        play.classList.replace('fa-pause', 'fa-play');
+        img.classList.remove('anime');
+    }
+    play.addEventListener('click', () => {
+        // if (isPlaying)
+        // {
+        //     pauseMusic();
+        // }
+        // else
+        // {
+        //     playMusic();
+        // }
+        isPlaying ? pauseMusic() : playMusic();
+    })
+    const songs = [
+        {
+            name: 'https://hiphopmore.site/music/uploads/2021/10/Shawn_Mendes_Ft_Camila_Cabello_-_Senorita-HIPHOPMORE.COM.mp3',
+            img: 'https://www.quirkybyte.com/wp-content/uploads/2019/07/Senorita-English-Song-Download-Shawn-Mendes.png',
+            title: 'SENORITA',
+            artist: 'Shawn Mendes',
+        },
+        {
+            name: 'https://cdn.trendybeatz.com/audio/CKay-Love-Nwantinti-[TrendyBeatz.com].mp3',
+            img: 'https://www.ubetoo.com/wp-content/uploads/2020/08/2020-08-22_09-23-59_521594-www.ubetoo.com.jpg',
+            title: 'love nwantiti',
+            artist: 'Ckay, ElGrande Toto',
+        },
+        {
+            name: 'https://www.thinknews.com.ng/wp-content/uploads/2020/10/Lipa_Ft_DaBaby_-_Levitatingmp3.mp3',
+            img: 'https://music-b26f.kxcdn.com/wp-content/uploads/2020/04/dua-lipa-future-nostalgia.jpg',
+            title: 'Levitating',
+            artist: 'Dua Lipa(ft. DaBaby)',
+        },
+        {
+            name: 'https://cdn.trendybeatz.com/audio/Justin-Bieber-Ft-The-Kid-Laroi-Stay-(TrendyBeatz.com).mp3',
+            img: 'https://1.bp.blogspot.com/-T9pEj8NBlRQ/YOyHw-1zDZI/AAAAAAAABL8/qe1R8lwT9iUfiGC36NU--GdYxOFI1MzZQCLcBGAsYHQ/w617-h617/The%2BKid%2BLAROI%2BStay%2B%2Blyrics%2Bsong.png',
+            title: 'STAY',
+            artist: 'Justin Bieber & TKL',
+        },
+        {
+            name: 'https://server1.indiryuklemp3.org/mp3_files/aefe73160f33e6b9fb75ae03bdd6f08f.mp3',
+            img: 'https://sklktecdnems01.cdnsrv.jio.com/c.saavncdn.com/059/Sugar-Brownies-English-2019-20190326005637-500x500.jpg',
+            title: 'SUGAR & BROWNIES',
+            artist: 'Dharia',
+        },
+        {
+            name: 'https://michbase.com/wp-content/uploads/2021/07/ed-sheeran-bad-habits-MichBase.com_.mp3',
+            img: 'https://i2.wp.com/corejamz.com/wp-content/uploads/2021/06/Bad-Habits.jpg?resize=440%2C440&ssl=1',
+            title: 'Bad Habits',
+            artist: 'Ed Sheeran',
+        },
+        {
+            name: 'https://www.michbase.com/wp-content/uploads/2021/03/The_Chainsmokers_ft_Halsey_-_Closer.mp3',
+            img: 'http://headlineplanet.com/home/wp-content/uploads/2016/07/The-Chainsmokers-Closer-Cover.jpg',
+            title: 'CLOSER',
+            artist: 'The Chainsmokers, Halsey',
+        },
+    ]
+    const loadSong = (songs) => {
+        title.textContent = songs.title;
+        artist.textContent = songs.artist;
+        music.src = songs.name;
+        img.src = songs.img;
+    }
+
+    let songIndex = 0;
+    const nextSong = () => {
+        songIndex = (songIndex + 1) % songs.length;
+        loadSong(songs[songIndex]);
+        playMusic();
+    }
+
+    const prevSong = () => {
+        songIndex = (songIndex - 1 + songs.length) % songs.length;
+        loadSong(songs[songIndex]);
+        playMusic();
+    }
+
+    // Progress JS Work
+    music.addEventListener('timeupdate', (event => {
+        // console.log(event);
+        const { currentTime, duration } = event.srcElement;
+        let progress_time = (currentTime / duration) * 100;
+        progress.style.width = `${progress_time}%`
+
+        // music duration update
+
+        let min_duration = Math.floor(duration / 60);
+        let sec_duration = Math.floor(duration % 60);
+        if (sec_duration < 10) {
+            sec_duration = `0${sec_duration}`;
+        }
+        if (duration) {
+            total_duration.textContent = `${min_duration}:${sec_duration}`;
+        }
+
+        // current duration update
+
+        let min_currentTime = Math.floor(currentTime / 60);
+        let sec_currentTime = Math.floor(currentTime % 60);
+        if (sec_currentTime < 10) {
+            sec_currentTime = `0${sec_currentTime}`;
+        }
+        if (currentTime) {
+            current_time.textContent = `${min_currentTime}:${sec_currentTime}`;
+        }
+
+    }));
+    // progress onclick functionality
+
+    progress_div.addEventListener('click', (event) => {
+        const { duration } = music;
+        let move_progress = (event.offsetX / event.srcElement.clientWidth) * duration;
+        music.currentTime = move_progress;
+    });
+
+    // if music ends calling next function
+    music.addEventListener('ended', nextSong);
+
+    next.addEventListener('click', nextSong);
+    prev.addEventListener('click', prevSong);
+</script>
+
+</html>
